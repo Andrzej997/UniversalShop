@@ -1,0 +1,11 @@
+---
+applications:
+- name: eureka-service
+  host: eureka-service-mateuszsojka
+  memory: 512M
+  disk: 256M
+  instances: 1
+  timeout: 90
+  path: target/eureka-service-0.1.jar
+  env:
+    SPRING_PROFILES_ACTIVE: cloud

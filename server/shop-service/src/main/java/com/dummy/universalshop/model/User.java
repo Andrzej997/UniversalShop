@@ -17,7 +17,10 @@ public class User extends BaseEntity {
 
     @Id
     @Column(name = "user_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name="id_seq",
+            sequenceName="id_seq",
+            allocationSize=1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "id_seq")
     private Long userId;
 
     @Column(name = "username", nullable = false)

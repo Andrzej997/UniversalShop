@@ -73,8 +73,8 @@ public class UserServiceImpl implements UserService {
         UserAuthority userAuthority = new UserAuthority();
         userAuthority.setUserId(user.getUserId());
         userAuthority.setUser(user);
-        userAuthority.setAuthorityId(1L);
-        userAuthority.setAuthority(authorityRepository.findOne(1L));
+        userAuthority.setAuthorityId(2L);
+        userAuthority.setAuthority(authorityRepository.findOne(2L));
         userAuthority = userAuthorityRepository.save(userAuthority);
         return userAuthority != null;
     }

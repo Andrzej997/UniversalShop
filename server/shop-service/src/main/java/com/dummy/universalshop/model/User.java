@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Mateusz on 11.05.2017.
@@ -17,10 +17,9 @@ public class User extends BaseEntity {
 
     @Id
     @Column(name = "user_id", nullable = false)
-    @SequenceGenerator(name="id_seq",
-            sequenceName="id_seq",
-            allocationSize=1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "id_seq")
+    @SequenceGenerator(name = "idSeq", sequenceName = "shop_schema.id_seq", initialValue = 2,
+            allocationSize = 1, schema = "shop_schema")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "idSeq")
     private Long userId;
 
     @Column(name = "username", nullable = false)
@@ -58,8 +57,13 @@ public class User extends BaseEntity {
     @NotNull
     private Boolean userEnabled;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<UserAuthority> userAuthorityList;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "USER_AUTHORITY", schema = "shop_schema", joinColumns = {
+            @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false, updatable = false)
+    }, inverseJoinColumns = {
+            @JoinColumn(name = "authority_id", referencedColumnName = "authority_id", nullable = false, updatable = false)
+    })
+    private Set<Authority> authoritySet;
 
     @Override
     protected void prePersist() {
@@ -151,11 +155,11 @@ public class User extends BaseEntity {
         this.userEnabled = userEnabled;
     }
 
-    public List<UserAuthority> getUserAuthorityList() {
-        return userAuthorityList;
+    public Set<Authority> getAuthoritySet() {
+        return authoritySet;
     }
 
-    public void setUserAuthorityList(List<UserAuthority> userAuthorityList) {
-        this.userAuthorityList = userAuthorityList;
+    public void setAuthoritySet(Set<Authority> authoritySet) {
+        this.authoritySet = authoritySet;
     }
 }

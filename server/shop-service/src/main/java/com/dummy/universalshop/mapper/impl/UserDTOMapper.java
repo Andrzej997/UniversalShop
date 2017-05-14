@@ -4,6 +4,7 @@ import com.dummy.universalshop.dto.UserDTO;
 import com.dummy.universalshop.mapper.BaseMapper;
 import com.dummy.universalshop.model.User;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -15,7 +16,8 @@ import java.util.Collection;
 @Component(value = "userDTOMapper")
 public class UserDTOMapper implements BaseMapper<User, UserDTO> {
 
-    private ModelMapper mapper = new ModelMapper();
+    @Autowired
+    private ModelMapper mapper;
 
     @Override
     public UserDTO convertToTransportObject(User entity) {
@@ -51,5 +53,9 @@ public class UserDTOMapper implements BaseMapper<User, UserDTO> {
         Collection<User> result = new ArrayList<>();
         transportObjectList.forEach(userDTO -> result.add(convertToEntity(userDTO)));
         return result;
+    }
+
+    public void setMapper(ModelMapper mapper) {
+        this.mapper = mapper;
     }
 }

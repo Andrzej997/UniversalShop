@@ -4,7 +4,7 @@ import com.dummy.universalshop.model.base.BaseEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Mateusz on 11.05.2017.
@@ -15,16 +15,17 @@ public class Authority extends BaseEntity {
 
     @Id
     @Column(name = "authority_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull
+    @SequenceGenerator(name = "idSeq", sequenceName = "shop_schema.id_seq", initialValue = 2,
+            allocationSize = 1, schema = "shop_schema")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "idSeq")
     private Long authorityId;
 
     @Column(name = "authority", nullable = false)
     @NotNull
     private String authority;
 
-    @OneToMany(mappedBy = "authority", cascade = CascadeType.ALL)
-    private List<UserAuthority> userAuthorityList;
+    @ManyToMany(mappedBy = "authoritySet", fetch = FetchType.LAZY)
+    private Set<User> userSet;
 
     public Long getAuthorityId() {
         return authorityId;
@@ -42,11 +43,11 @@ public class Authority extends BaseEntity {
         this.authority = authority;
     }
 
-    public List<UserAuthority> getUserAuthorityList() {
-        return userAuthorityList;
+    public Set<User> getUserSet() {
+        return userSet;
     }
 
-    public void setUserAuthorityList(List<UserAuthority> userAuthorityList) {
-        this.userAuthorityList = userAuthorityList;
+    public void setUserSet(Set<User> userSet) {
+        this.userSet = userSet;
     }
 }

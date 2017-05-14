@@ -34,4 +34,8 @@ public class UserController {
         Boolean result = userService.registerUser(userDTO);
         return new ResponseEntity<Boolean>(result, HttpStatus.OK);
     }
+
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
 }

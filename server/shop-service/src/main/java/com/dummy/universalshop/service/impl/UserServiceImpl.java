@@ -2,10 +2,9 @@ package com.dummy.universalshop.service.impl;
 
 import com.dummy.universalshop.dto.UserDTO;
 import com.dummy.universalshop.mapper.BaseMapper;
+import com.dummy.universalshop.model.Authority;
 import com.dummy.universalshop.model.User;
-import com.dummy.universalshop.model.UserAuthority;
 import com.dummy.universalshop.repository.AuthorityRepository;
-import com.dummy.universalshop.repository.UserAuthorityRepository;
 import com.dummy.universalshop.repository.UserRepository;
 import com.dummy.universalshop.service.UserService;
 import org.apache.commons.lang.time.DateUtils;
@@ -15,7 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Mateusz on 11.05.2017.
@@ -26,9 +27,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private UserAuthorityRepository userAuthorityRepository;
 
     @Autowired
     private AuthorityRepository authorityRepository;
@@ -62,20 +60,32 @@ public class UserServiceImpl implements UserService {
         user.setAccountLocked(false);
         user.setPasswordExpirationTime(expirationTime);
         user.setUserEnabled(true);
+        createDefaultUserAuthority(user);
         user = userRepository.save(user);
-        return createNewUserAuthority(user);
+        return user != null && user.getUserId() != null;
     }
 
-    private Boolean createNewUserAuthority(User user) {
-        if (user == null || user.getUserId() == null) {
-            return false;
+    private void createDefaultUserAuthority(User user) {
+        if (user == null) {
+            return;
         }
-        UserAuthority userAuthority = new UserAuthority();
-        userAuthority.setUserId(user.getUserId());
-        userAuthority.setUser(user);
-        userAuthority.setAuthorityId(2L);
-        userAuthority.setAuthority(authorityRepository.findOne(2L));
-        userAuthority = userAuthorityRepository.save(userAuthority);
-        return userAuthority != null;
+        Authority authority = authorityRepository.findOne(2L);
+        if (authority != null) {
+            Set<Authority> authoritySet = new HashSet<>();
+            authoritySet.add(authority);
+            user.setAuthoritySet(authoritySet);
+        }
+    }
+
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public void setAuthorityRepository(AuthorityRepository authorityRepository) {
+        this.authorityRepository = authorityRepository;
+    }
+
+    public void setUserMapper(BaseMapper<User, UserDTO> userMapper) {
+        this.userMapper = userMapper;
     }
 }

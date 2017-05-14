@@ -34,4 +34,23 @@ public class UserAuthorityPK implements Serializable {
     public void setAuthorityId(Long authorityId) {
         this.authorityId = authorityId;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        UserAuthorityPK that = (UserAuthorityPK) o;
+
+        if (!userId.equals(that.userId)) return false;
+        return authorityId.equals(that.authorityId);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = userId.hashCode();
+        result = 31 * result + authorityId.hashCode();
+        return result;
+    }
 }

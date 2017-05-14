@@ -7,6 +7,7 @@ spring:
     show_sql: true
     database: POSTGRESQL
     hibernate:
+      use-new-id-generator-mappings: true
       ddl-auto: none
   resources:
     chain:
@@ -48,6 +49,7 @@ spring:
     show_sql: true
     hibernate:
       ddl-auto: validate
+      use-new-id-generator-mappings: true
     database: POSTGRESQL
   datasource:
     initialize: false
@@ -103,6 +105,7 @@ spring:
   jpa:
     show_sql: true
     hibernate:
+      use-new-id-generator-mappings: true
       ddl-auto: none
     database: POSTGRESQL
   datasource:

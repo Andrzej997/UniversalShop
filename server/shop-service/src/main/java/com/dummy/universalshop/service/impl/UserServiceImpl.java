@@ -10,6 +10,7 @@ import com.dummy.universalshop.service.UserService;
 import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -77,6 +78,11 @@ public class UserServiceImpl implements UserService {
             authoritySet.add(authority);
             user.setAuthoritySet(authoritySet);
         }
+    }
+
+    @CacheEvict(value = "username", allEntries = true)
+    public void clearCache() {
+
     }
 
     public void setUserRepository(UserRepository userRepository) {

@@ -2,6 +2,8 @@ package com.dummy.universalshop.model;
 
 import com.dummy.universalshop.model.base.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -13,6 +15,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "USER", uniqueConstraints = {@UniqueConstraint(columnNames = {"username"})}, schema = "shop_schema")
+@Cache(region = "EntityCache", usage = CacheConcurrencyStrategy.READ_WRITE)
 public class User extends BaseEntity {
 
     @Id

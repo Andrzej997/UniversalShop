@@ -1,5 +1,4 @@
 package com.dummy.universalshop.model.base;
-
 import javax.persistence.*;
 import java.io.Serializable;
 

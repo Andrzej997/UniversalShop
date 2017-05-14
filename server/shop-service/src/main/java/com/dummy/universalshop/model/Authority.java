@@ -1,6 +1,8 @@
 package com.dummy.universalshop.model;
 
 import com.dummy.universalshop.model.base.BaseEntity;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -11,6 +13,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "AUTHORITY", schema = "shop_schema")
+@Cache(region = "EntityCache", usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Authority extends BaseEntity {
 
     @Id

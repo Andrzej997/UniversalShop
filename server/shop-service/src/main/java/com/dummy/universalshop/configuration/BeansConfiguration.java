@@ -22,12 +22,12 @@ public class BeansConfiguration {
     }
 
     @Bean
-    public CacheManager getEhCacheManager() {
-        return new EhCacheCacheManager(getEhCacheFactory().getObject());
+    public CacheManager cacheManager() {
+        return new EhCacheCacheManager(ehCacheManagerFactoryBean().getObject());
     }
 
     @Bean
-    public EhCacheManagerFactoryBean getEhCacheFactory() {
+    public EhCacheManagerFactoryBean ehCacheManagerFactoryBean() {
         EhCacheManagerFactoryBean factoryBean = new EhCacheManagerFactoryBean();
         factoryBean.setConfigLocation(new ClassPathResource("ehcache.xml"));
         factoryBean.setShared(true);

@@ -7,15 +7,6 @@ spring:
       uri: http://localhost:8888
       discovery:
         serviceId: config-server
-server:
-  port: 8761
-endpoints:
-  restart:
-    enabled: true
-  shutdown:
-    enabled: true
-  health:
-    sensitive: false
 eureka:
   instance:
     hostname: eureka-service
@@ -29,6 +20,15 @@ eureka:
       defaultZone: http://localhost:8761/eureka/
   server:
     enable-self-preservation: false
+server:
+  port: 8761
+endpoints:
+  restart:
+    enabled: true
+  shutdown:
+    enabled: true
+  health:
+    sensitive: false
 ---
 spring:
   profiles: docker
@@ -39,26 +39,6 @@ spring:
       uri: http://config-server:8888
       discovery:
         serviceId: config-server
-server:
-  port: 8761
-endpoints:
-  restart:
-    enabled: true
-  shutdown:
-    enabled: true
-  health:
-    sensitive: false
-eureka:
-  instance:
-    prefer-ip-address: false
-    leaseRenewalIntervalInSeconds: 1
-    leaseExpirationDurationInSeconds: 2
-    hostname: eureka-service
-  client:
-    registerWithEureka: false
-    fetchRegistry: false
-    serviceUrl:
-      defaultZone: http://eureka-service:8761/eureka/
 ---
 spring:
   profiles: cloud
@@ -67,3 +47,5 @@ spring:
   cloud:
     config:
       uri: http://config-server-mateuszsojka.cfapps.io:8888/
+      discovery:
+        serviceId: config-server

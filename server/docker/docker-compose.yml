@@ -1,0 +1,33 @@
+shopdb:
+  container_name: shopdb
+  image: mateuszsojka/shopdb:latest
+  ports:
+   - 5432:5432
+rabbitmq:
+  image: rabbitmq:management
+  ports:
+    - "5672:5672"
+    - "15672:15672"
+
+eureka-service:
+  image: mateuszsojka/eureka-service
+  ports:
+   - 8761:8761
+   
+config-server:
+  image: mateuszsojka/config-server
+  restart: always
+  ports:
+   - 8888:8888
+  links:
+   - eureka-service:eureka-service
+   
+shop-service:
+  image: mateuszsojka/shop-service
+  restart: always
+  ports:
+   - 9000:9000
+  links:
+   - shopdb:shopdb
+   - eureka-service:eureka-service
+   - config-server:config-server

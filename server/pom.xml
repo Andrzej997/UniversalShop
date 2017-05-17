@@ -9,8 +9,13 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>auth-server</module>
         <module>eureka-service</module>
         <module>shop-service</module>
+        <module>config-server</module>
+        <module>hystrix-dashboard-monitor</module>
+        <module>turbine-server</module>
+        <module>zuul-proxy</module>
     </modules>
 
     <name>Universal Shop</name>
@@ -29,6 +34,7 @@
         <java.version>1.8</java.version>
         <spring-cloud.version>Dalston.BUILD-SNAPSHOT</spring-cloud.version>
         <docker.plugin.version>0.3.258</docker.plugin.version>
+        <docker.image.prefix>mateuszsojka</docker.image.prefix>
         <shop.version>1.0</shop.version>
     </properties>
 
@@ -41,6 +47,33 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-hystrix</artifactId>
+            <version>1.2.1.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-bus-amqp</artifactId>
+            <version>1.2.1.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-netflix-hystrix-dashboard</artifactId>
+            <version>1.2.2.BUILD-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security.oauth</groupId>
+            <artifactId>spring-security-oauth2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jdk8</artifactId>
         </dependency>
     </dependencies>
 

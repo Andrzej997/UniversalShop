@@ -1,0 +1,70 @@
+spring:
+  profiles: development
+  application:
+    name: turbine-server
+  cloud:
+    config:
+      uri: http://localhost:8888
+      discovery:
+        service-id: config-server
+      fail-fast: false
+  rabbitmq:
+    host: localhost
+    port: 5672
+info:
+  component: Turbine
+endpoints:
+  restart:
+    enabled: true
+  shutdown:
+    enabled: true
+server:
+  port: 8989
+management:
+  port: 8990
+eureka:
+  instance:
+    hostname: turbine-server
+    leaseRenewalIntervalInSeconds: 1
+    leaseExpirationDurationInSeconds: 2
+    prefer-ip-address: true
+    nonSecurePort: ${server.port}
+  client:
+    eureka-connection-idle-timeout-seconds: 3000
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+logging:
+  level:
+    root: WARN
+    com.netflix.discovery: 'OFF'
+    org.springframework.cloud.config.client.ConfigServicePropertySourceLocator: INFO
+    org.springframework.retry.support.RetryTemplate: DEBUG
+    org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainer: INFO
+    org.springframework.boot.context.embedded.undertow.UndertowEmbeddedServletContainer: INFO
+turbine:
+  stream:
+    port: 8989
+---
+spring:
+  profiles: cloud
+  application:
+    name: turbine-server
+  cloud:
+    config:
+      uri: ${vcap.services.${PREFIX:}config-server.credentials.uri:http://${PREFIX:}${config-server.${application.domain:cfapps.io}}}
+      discovery:
+        service-id: config-server
+      fail-fast: true
+---
+spring:
+  profiles: docker
+  application:
+    name: turbine-server
+  cloud:
+    config:
+      uri: http://config-server:8888
+      discovery:
+        serviceId: config-server
+      fail-fast: true

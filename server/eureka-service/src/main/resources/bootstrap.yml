@@ -39,6 +39,7 @@ spring:
       uri: http://config-server:8888
       discovery:
         serviceId: config-server
+      fail-fast: true
 ---
 spring:
   profiles: cloud
@@ -49,3 +50,4 @@ spring:
       uri: http://config-server-mateuszsojka.cfapps.io:8888/
       discovery:
         serviceId: config-server
+      fail-fast: true

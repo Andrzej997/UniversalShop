@@ -1,0 +1,23 @@
+server:
+  contextPath: /spring-security-oauth-server
+  port: 8081
+spring:
+  application:
+    name: auth-server
+  cloud:
+    config:
+      uri: http://localhost:8888
+      discovery:
+        serviceId: config-server
+  jpa:
+    show_sql: true
+    hibernate:
+      ddl-auto: validate
+      use-new-id-generator-mappings: true
+    database: POSTGRESQL
+  datasource:
+    initialize: false
+    url: jdbc:postgresql://localhost:5432/shop
+    username: sysadm
+    password: sysadm
+    driver-class-name: org.postgresql.Driver

@@ -8,6 +8,7 @@ spring:
       uri: ${vcap.services.${PREFIX:}config-server.credentials.uri:http://${PREFIX:}${config-server.${application.domain:cfapps.io}}}
       discovery:
         enabled: true
+      fail-fast: true
 ---
 
 spring:
@@ -91,4 +92,5 @@ spring:
       uri: http://config-server:8888
       discovery:
         serviceId: config-server
+      fail-fast: true
 ---

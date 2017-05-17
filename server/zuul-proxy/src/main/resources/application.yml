@@ -1,0 +1,68 @@
+spring:
+  profiles: development
+  application:
+    name: zuul-proxy
+  cloud:
+    config:
+      uri: http://localhost:8888
+      discovery:
+        serviceId: config-server
+      fail-fast: true
+  http:
+    multipart:
+      max-file-size: 25600MB
+      max-request-size: 25600MB
+server:
+  port: 8080
+eureka:
+  instance:
+    hostname: zuul-proxy
+    leaseRenewalIntervalInSeconds: 1
+    leaseExpirationDurationInSeconds: 2
+    preferIpAddress: true
+    nonSecurePort: ${server.port}
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    registryFetchIntervalSeconds: 5
+    instanceInfoReplicationIntervalSeconds: 5
+    initialInstanceInfoReplicationIntervalSeconds: 5
+    eureka-connection-idle-timeout-seconds: 6000
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+zuul:
+  ignoredServices: "*"
+  routes:
+    shop-service:
+      path: /shop/**
+      serviceId: shop-service
+      url: http://localhost:9000/
+endpoints:
+  restart:
+    enabled: true
+  shutdown:
+    enabled: true
+  health:
+    sensitive: false
+---
+spring:
+  profiles: cloud
+  application:
+    name: zuul-proxy
+  cloud:
+    config:
+      uri: ${vcap.services.${PREFIX:}config-server.credentials.uri:http://${PREFIX:}${config-server.${application.domain:cfapps.io}}}
+      discovery:
+        serviceId: config-server
+      fail-fast: true
+---
+spring:
+  profiles: docker
+  application:
+    name: zuul-proxy
+  cloud:
+    config:
+      uri: http://config-server:8888
+      discovery:
+        serviceId: config-server
+      fail-fast: true

@@ -1,11 +1,9 @@
-server:
-  contextPath: /spring-security-oauth-server
-  port: 8081
+spring:
+  application:
+    name: auth-server
 ---
 spring:
   profiles: development
-  application:
-    name: auth-server
   cloud:
     config:
       uri: http://localhost:8888
@@ -19,7 +17,26 @@ spring:
     database: POSTGRESQL
   datasource:
     initialize: false
-    url: jdbc:postgresql://localhost:5432/shop
+    url: jdbc:postgresql://localhost:5432/shop?currentSchema=shop_schema
     username: sysadm
     password: sysadm
     driver-class-name: org.postgresql.Driver
+server:
+  contextPath: /spring-security-oauth-server
+  port: 8081
+---
+spring:
+  profiles: docker
+  cloud:
+    config:
+      uri: http://config-server:8888
+      discovery:
+        serviceId: config-server
+---
+spring:
+  profiles: cloud
+  cloud:
+    config:
+      discovery:
+        serviceId: config-server
+      uri: ${vcap.services.${PREFIX:}config-server.credentials.uri:http://${PREFIX:}${config-server.${application.domain:cfapps.io}}}

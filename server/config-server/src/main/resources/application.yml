@@ -11,3 +11,6 @@ spring:
           force-pull: true
 management:
   context-path: /admin
+security:
+  basic:
+    enabled: false

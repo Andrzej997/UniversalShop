@@ -1,5 +1,8 @@
 info:
   component: Hystrix Dashboard
+security:
+  basic:
+    enabled: false
 ---
 spring:
   profiles: development

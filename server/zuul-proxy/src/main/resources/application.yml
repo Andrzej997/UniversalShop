@@ -1,6 +1,3 @@
-security:
-  basic:
-    enabled: false
 ---
 spring:
   profiles: development
@@ -8,7 +5,7 @@ spring:
     name: zuul-proxy
   cloud:
     config:
-      uri: http://localhost:8888
+      uri: https://localhost:8888
       discovery:
         serviceId: config-server
       fail-fast: false
@@ -18,13 +15,22 @@ spring:
       max-request-size: 25600MB
 server:
   port: 8080
+  ssl:
+    key-store: classpath:keystore.jks
+    key-store-password: password
+    key-alias: localhost
+    trust-store: classpath:truststore.jks
+    trust-store-password: password
 eureka:
   instance:
     hostname: zuul-proxy
     leaseRenewalIntervalInSeconds: 1
     leaseExpirationDurationInSeconds: 2
     preferIpAddress: true
-    nonSecurePort: ${server.port}
+    non-secure-port-enabled: false
+    secure-port-enabled: true
+    secure-port: ${server.port}
+    secureVirtualHostName: ${spring.application.name}
   client:
     registerWithEureka: true
     fetchRegistry: true
@@ -33,14 +39,14 @@ eureka:
     initialInstanceInfoReplicationIntervalSeconds: 5
     eureka-connection-idle-timeout-seconds: 6000
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: https://localhost:8761/eureka/
 zuul:
   ignoredServices: "*"
+  ssl-hostname-validation-enabled: false
   routes:
     shop-service:
       path: /shop/**
       serviceId: shop-service
-      url: http://localhost:9000/
 endpoints:
   restart:
     enabled: true
@@ -48,6 +54,14 @@ endpoints:
     enabled: true
   health:
     sensitive: false
+security:
+  basic:
+    enabled: false
+  oauth2:
+    resource:
+      userInfoUri: https://localhost:8081/spring-security-oauth-server/user
+ribbon:
+    IsSecure: true
 ---
 spring:
   profiles: cloud
@@ -55,7 +69,7 @@ spring:
     name: zuul-proxy
   cloud:
     config:
-      uri: ${vcap.services.${PREFIX:}config-server.credentials.uri:http://${PREFIX:}${config-server.${application.domain:cfapps.io}}}
+      uri: ${vcap.services.${PREFIX:}config-server.credentials.uri:https://${PREFIX:}${config-server.${application.domain:cfapps.io}}}
       discovery:
         serviceId: config-server
       fail-fast: true
@@ -66,7 +80,7 @@ spring:
     name: zuul-proxy
   cloud:
     config:
-      uri: http://config-server:8888
+      uri: https://config-server:8888
       discovery:
         serviceId: config-server
       fail-fast: true

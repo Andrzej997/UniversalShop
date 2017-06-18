@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
  * Created by Paweł on 2017-05-24.
  */
 @Entity
-@Table(name = "ADRESS", uniqueConstraints = {@UniqueConstraint(columnNames = {"username"})}, schema = "shop_schema")
+@Table(name = "ADRESS", schema = "shop_schema")
 @Cache(region = "EntityCache", usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Adress extends BaseEntity {
 
@@ -48,7 +48,7 @@ public class Adress extends BaseEntity {
     @Column(name = "phone_number", length = 20)
     private String phoneNumber;
 
-    @Column(name = "phone_number2", length = 20)
+    @Column(name = "phone_number_2", length = 20)
     private String phoneNumber2;
 
     public Long getId() {

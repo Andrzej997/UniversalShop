@@ -5,7 +5,7 @@ spring:
     name: shop-service
   cloud:
     config:
-      uri: ${vcap.services.${PREFIX:}config-server.credentials.uri:http://${PREFIX:}${config-server.${application.domain:cfapps.io}}}
+      uri: ${vcap.services.${PREFIX:}config-server.credentials.uri:https://${PREFIX:}${config-server.${application.domain:cfapps.io}}}
       discovery:
         enabled: true
       fail-fast: true
@@ -17,7 +17,7 @@ spring:
     name: shop-service
   cloud:
     config:
-      uri: http://localhost:8888
+      uri: https://localhost:8888
       discovery:
         serviceId: config-server
   jpa:
@@ -51,19 +51,28 @@ spring:
       config: classpath:ehcache.xml
 server:
   port: 9000
+  ssl:
+    key-store: classpath:keystore.jks
+    key-store-password: password
+    key-alias: localhost
+    trust-store: classpath:truststore.jks
+    trust-store-password: password
 eureka:
   instance:
     hostname: shop-service
     leaseRenewalIntervalInSeconds: 1
     leaseExpirationDurationInSeconds: 2
     prefer-ip-address: true
-    nonSecurePort: ${server.port}
+    non-secure-port-enabled: false
+    secure-port-enabled: true
+    secure-port: ${server.port}
+    secureVirtualHostName: ${spring.application.name}
   client:
     eureka-connection-idle-timeout-seconds: 3000
     registerWithEureka: true
     fetchRegistry: true
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: https://localhost:8761/eureka/
 ribbon:
   ReadTimeout: 18000000
   ConnectTimeout: 18000000
@@ -79,10 +88,14 @@ jwt:
   key: e038394bc945eed83ca8797aae26fddfae91b175fc4dd26339dd6cb8066c65b892d6ac07c0a3c0384601896ade90551905460af66e4864e9c71a31d6d523c136
   expiration: 36000
 security:
+  basic:
+    enabled: false
   oauth2:
     resource:
-      jwt:
-        key-uri: http://localhost:8081/oauth/token_key
+      user-info-uri: https://localhost:8081/spring-security-oauth-server/user
+management:
+  security:
+    enabled: false
 ---
 
 spring:
@@ -91,7 +104,7 @@ spring:
     name: shop-service
   cloud:
     config:
-      uri: http://config-server:8888
+      uri: https://config-server:8888
       discovery:
         serviceId: config-server
       fail-fast: true
@@ -99,5 +112,5 @@ security:
   oauth2:
     resource:
       jwt:
-        key-uri: http://auth-server:8081/oauth/token_key
+        key-uri: https://auth-server:8081/oauth/token_key
 ---

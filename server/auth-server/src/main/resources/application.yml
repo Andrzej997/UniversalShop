@@ -6,7 +6,7 @@ spring:
   profiles: development
   cloud:
     config:
-      uri: http://localhost:8888
+      uri: https://localhost:8888
       discovery:
         serviceId: config-server
   jpa:
@@ -24,12 +24,18 @@ spring:
 server:
   contextPath: /spring-security-oauth-server
   port: 8081
+  ssl:
+    key-store: classpath:keystore.jks
+    key-store-password: password
+    key-alias: localhost
+    trust-store: classpath:truststore.jks
+    trust-store-password: password
 ---
 spring:
   profiles: docker
   cloud:
     config:
-      uri: http://config-server:8888
+      uri: https://config-server:8888
       discovery:
         serviceId: config-server
 ---
@@ -39,4 +45,4 @@ spring:
     config:
       discovery:
         serviceId: config-server
-      uri: ${vcap.services.${PREFIX:}config-server.credentials.uri:http://${PREFIX:}${config-server.${application.domain:cfapps.io}}}
+      uri: ${vcap.services.${PREFIX:}config-server.credentials.uri:https://${PREFIX:}${config-server.${application.domain:cfapps.io}}}

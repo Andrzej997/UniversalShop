@@ -1,6 +1,12 @@
 server:
   port: 8888
   display-name: Config-Server
+  ssl:
+    key-store: classpath:keystore.jks
+    key-store-password: password
+    key-alias: localhost
+    trust-store: classpath:truststore.jks
+    trust-store-password: password
 spring:
   cloud:
     config:
@@ -14,3 +20,21 @@ management:
 security:
   basic:
     enabled: false
+---
+spring:
+  profiles: development
+  rabbitmq:
+    host: localhost
+    port: 5672
+---
+spring:
+  profiles: docker
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+---
+spring:
+  profiles: cloud
+  rabbitmq:
+    host: rabbitmq
+    port: 5672

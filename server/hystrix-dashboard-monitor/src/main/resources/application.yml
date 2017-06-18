@@ -1,8 +1,5 @@
 info:
   component: Hystrix Dashboard
-security:
-  basic:
-    enabled: false
 ---
 spring:
   profiles: development
@@ -25,8 +22,17 @@ endpoints:
     enabled: true
   shutdown:
     enabled: true
+security:
+  basic:
+    enabled: false
 server:
   port: 7979
+  ssl:
+    key-store: classpath:keystore.jks
+    key-store-password: password
+    key-alias: localhost
+    trust-store: classpath:truststore.jks
+    trust-store-password: password
 ---
 spring:
   profiles: cloud
@@ -34,7 +40,7 @@ spring:
     name: hystrix-dashboard-monitor
   cloud:
     config:
-      uri: ${vcap.services.${PREFIX:}config-server.credentials.uri:http://${PREFIX:}${config-server.${application.domain:cfapps.io}}}
+      uri: ${vcap.services.${PREFIX:}config-server.credentials.uri:https://${PREFIX:}${config-server.${application.domain:cfapps.io}}}
       discovery:
         service-id: config-server
       fail-fast: true
@@ -45,7 +51,7 @@ spring:
     name: turbine-server
   cloud:
     config:
-      uri: http://config-server:8888
+      uri: https://config-server:8888
       discovery:
         serviceId: config-server
       fail-fast: true

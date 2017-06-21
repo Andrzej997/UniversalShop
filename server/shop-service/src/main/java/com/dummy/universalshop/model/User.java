@@ -8,13 +8,14 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 /**
  * Created by Mateusz on 11.05.2017.
  */
 @Entity
-@Table(name = "USER", uniqueConstraints = {@UniqueConstraint(columnNames = {"username"})}, schema = "shop_schema")
+@Table(name = "user", uniqueConstraints = {@UniqueConstraint(columnNames = {"username"})}, schema = "shop_schema")
 @Cache(region = "EntityCache", usage = CacheConcurrencyStrategy.READ_WRITE)
 public class User extends BaseEntity {
 
@@ -67,6 +68,27 @@ public class User extends BaseEntity {
             @JoinColumn(name = "authority_id", referencedColumnName = "authority_id", nullable = false, updatable = false)
     })
     private Set<Authority> authoritySet;
+
+    @OneToMany(mappedBy = "user")
+    private List<Adress> adressList;
+
+    @OneToMany(mappedBy = "user")
+    private List<Product> sellingProducts;
+
+    @OneToMany(mappedBy = "user")
+    private List<Comment> comments;
+
+    @OneToMany(mappedBy = "user")
+    private List<Auction> participatingAuctions;
+
+    @OneToMany(mappedBy = "user")
+    private List<ObservedProduct> observedProducts;
+
+    @OneToMany(mappedBy = "user")
+    private List<BoughtProduct> boughtProducts;
+
+    @OneToMany(mappedBy = "user")
+    private List<ShoppingCart> shoppingCarts;
 
     @Override
     protected void prePersist() {
@@ -164,5 +186,61 @@ public class User extends BaseEntity {
 
     public void setAuthoritySet(Set<Authority> authoritySet) {
         this.authoritySet = authoritySet;
+    }
+
+    public List<Adress> getAdressList() {
+        return adressList;
+    }
+
+    public void setAdressList(List<Adress> adressList) {
+        this.adressList = adressList;
+    }
+
+    public List<Product> getSellingProducts() {
+        return sellingProducts;
+    }
+
+    public void setSellingProducts(List<Product> sellingProducts) {
+        this.sellingProducts = sellingProducts;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public List<Auction> getParticipatingAuctions() {
+        return participatingAuctions;
+    }
+
+    public void setParticipatingAuctions(List<Auction> participatingAuctions) {
+        this.participatingAuctions = participatingAuctions;
+    }
+
+    public List<ObservedProduct> getObservedProducts() {
+        return observedProducts;
+    }
+
+    public void setObservedProducts(List<ObservedProduct> observedProducts) {
+        this.observedProducts = observedProducts;
+    }
+
+    public List<BoughtProduct> getBoughtProducts() {
+        return boughtProducts;
+    }
+
+    public void setBoughtProducts(List<BoughtProduct> boughtProducts) {
+        this.boughtProducts = boughtProducts;
+    }
+
+    public List<ShoppingCart> getShoppingCarts() {
+        return shoppingCarts;
+    }
+
+    public void setShoppingCarts(List<ShoppingCart> shoppingCarts) {
+        this.shoppingCarts = shoppingCarts;
     }
 }

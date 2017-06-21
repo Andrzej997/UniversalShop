@@ -18,8 +18,7 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
 
     @Bean
     public LocaleResolver localeResolver() {
-        AcceptHeaderLocaleResolver localeResolver = new AcceptHeaderLocaleResolver();
-        return localeResolver;
+        return new AcceptHeaderLocaleResolver();
     }
 
     @Bean

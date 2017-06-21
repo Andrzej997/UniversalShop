@@ -1,0 +1,58 @@
+---
+spring:
+  profiles: development
+  application:
+    name: zipkin-server
+  cloud:
+    config:
+      uri: https://localhost:8888
+      discovery:
+        serviceId: config-server
+      fail-fast: false
+  rabbitmq:
+    host: localhost
+    port: 5672
+  http:
+    multipart:
+      max-file-size: 25600MB
+      max-request-size: 25600MB
+server:
+  port: 9411
+  ssl:
+    key-store: classpath:keystore.jks
+    key-store-password: password
+    key-alias: localhost
+    trust-store: classpath:truststore.jks
+    trust-store-password: password
+endpoints:
+  restart:
+    enabled: true
+  shutdown:
+    enabled: true
+  health:
+    sensitive: false
+security:
+  basic:
+    enabled: false
+---
+spring:
+  profiles: cloud
+  application:
+    name: zipkin-server
+  cloud:
+    config:
+      uri: ${vcap.services.${PREFIX:}config-server.credentials.uri:https://${PREFIX:}${config-server.${application.domain:cfapps.io}}}
+      discovery:
+        serviceId: config-server
+      fail-fast: true
+---
+spring:
+  profiles: docker
+  application:
+    name: zipkin-server
+  cloud:
+    config:
+      uri: https://config-server:8888
+      discovery:
+        serviceId: config-server
+      fail-fast: true

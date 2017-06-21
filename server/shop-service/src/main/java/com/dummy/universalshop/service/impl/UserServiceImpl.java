@@ -41,11 +41,7 @@ public class UserServiceImpl implements UserService {
     @Cacheable("username")
     public Boolean usernameExists(String username) {
         List<User> userList = userRepository.findByUsername(username);
-        if (userList == null || userList.isEmpty()) {
-            return false;
-        } else {
-            return true;
-        }
+        return userList != null && !userList.isEmpty();
     }
 
     @Override

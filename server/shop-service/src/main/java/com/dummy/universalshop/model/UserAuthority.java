@@ -10,7 +10,7 @@ import javax.persistence.*;
  * Created by Mateusz on 11.05.2017.
  */
 @Entity
-@Table(name = "USER_AUTHORITY", schema = "shop_schema")
+@Table(name = "user_authority", schema = "shop_schema")
 @IdClass(UserAuthorityPK.class)
 @Cache(region = "EntityCache", usage = CacheConcurrencyStrategy.READ_WRITE)
 public class UserAuthority extends BaseEntity {

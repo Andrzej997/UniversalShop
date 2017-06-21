@@ -12,7 +12,7 @@ import java.util.Set;
  * Created by Mateusz on 11.05.2017.
  */
 @Entity
-@Table(name = "AUTHORITY", schema = "shop_schema")
+@Table(name = "authority", schema = "shop_schema")
 @Cache(region = "EntityCache", usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Authority extends BaseEntity {
 

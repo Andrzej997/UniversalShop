@@ -1,7 +1,6 @@
 package com.dummy.universalshop.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -18,7 +17,7 @@ import java.util.Locale;
  * Created by Mateusz on 16.05.2017.
  */
 @ControllerAdvice
-@Order(Ordered.LOWEST_PRECEDENCE)
+@Order
 public class DefaultRestResponseEntityExpectionHandler extends ResponseEntityExceptionHandler {
 
     @Autowired

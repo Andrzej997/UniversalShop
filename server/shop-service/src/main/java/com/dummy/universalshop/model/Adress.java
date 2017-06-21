@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
  * Created by Paweł on 2017-05-24.
  */
 @Entity
-@Table(name = "ADRESS", schema = "shop_schema")
+@Table(name = "adress", schema = "shop_schema")
 @Cache(region = "EntityCache", usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Adress extends BaseEntity {
 

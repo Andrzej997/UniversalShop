@@ -23,7 +23,7 @@ public class UserController {
     @ResponseBody
     ResponseEntity<Boolean> checkUsernameExists(@RequestParam(value = "username") String username) {
         Boolean exists = userService.usernameExists(username);
-        return new ResponseEntity<Boolean>(exists, HttpStatus.OK);
+        return new ResponseEntity<>(exists, HttpStatus.OK);
     }
 
     @PostMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -31,7 +31,7 @@ public class UserController {
     @ResponseBody
     ResponseEntity<Boolean> registerUser(@RequestBody UserDTO userDTO) {
         Boolean result = userService.registerUser(userDTO);
-        return new ResponseEntity<Boolean>(result, HttpStatus.OK);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     public void setUserService(UserService userService) {

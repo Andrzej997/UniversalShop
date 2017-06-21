@@ -42,8 +42,7 @@ public class UserAuthorityPK implements Serializable {
 
         UserAuthorityPK that = (UserAuthorityPK) o;
 
-        if (!userId.equals(that.userId)) return false;
-        return authorityId.equals(that.authorityId);
+        return userId.equals(that.userId) && authorityId.equals(that.authorityId);
 
     }
 

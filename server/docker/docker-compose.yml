@@ -2,9 +2,49 @@ shopdb:
   container_name: shopdb
   image: mateuszsojka/shopdb:latest
   ports:
-   - 5432:5432
+   - "5432:5432"
+
+elasticsearch:
+  image: docker.elastic.co/elasticsearch/elasticsearch:5.2.2
+  ports:
+    - "9200:9200"
+  environment:
+    - "xpack.security.enabled=false"
+    - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+  healthcheck:
+    test: ["CMD", "curl", "-f", "http://localhost:9200"]
+    interval: 10s
+    timeout: 5s
+    retries: 10
+
+kibana:
+  image: docker.elastic.co/kibana/kibana:5.2.2
+  ports:
+    - "5601:5601"
+  environment:
+    - "xpack.security.enabled=false"
+  depends_on:
+    elasticsearch:
+      condition: service_healthy
+
+logstash:
+  image: docker.elastic.co/logstash/logstash:5.2.2
+  ports:
+    - "25826:25826"
+  volumes:
+    - $PWD/elk-config:/elk-config
+  command: logstash -f /elk-config/logstash.config
+  depends_on:
+    elasticsearch:
+      condition: service_healthy
+  healthcheck:
+    test: ["CMD", "curl", "-f", "http://localhost:8080"]
+    interval: 10s
+    timeout: 5s
+    retries: 10
+
 rabbitmq:
-  image: rabbitmq:management
+  image: rabbitmq:3-management
   ports:
     - "5672:5672"
     - "15672:15672"
@@ -12,22 +52,122 @@ rabbitmq:
 eureka-service:
   image: mateuszsojka/eureka-service
   ports:
-   - 8761:8761
-   
+   - "8761:8761"
+  environment:
+   - JAVA_TOOL_OPTIONS=${MY_JAVA_TOOL_OPTIONS}
+  logging:
+    driver: syslog
+    options:
+      syslog-address: "tcp://127.0.0.1:25826"
+  depends_on:
+    logstash:
+      condition: service_healthy
+
 config-server:
   image: mateuszsojka/config-server
   restart: always
   ports:
-   - 8888:8888
+   - "8888:8888"
   links:
    - eureka-service:eureka-service
+  logging:
+    driver: syslog
+    options:
+      syslog-address: "tcp://127.0.0.1:25826"
+  depends_on:
+    logstash:
+      condition: service_healthy
+
+auth-server:
+  image: mateuszsojka/auth-server
+  restart: always
+  ports:
+    - "8081:8081"
+  logging:
+    driver: syslog
+    options:
+      syslog-address: "tcp://127.0.0.1:25826"
+  depends_on:
+    logstash:
+      condition: service_healthy
+  links:
+   - config-server:config-server
    
 shop-service:
   image: mateuszsojka/shop-service
   restart: always
   ports:
-   - 9000:9000
+   - "9000:9000"
   links:
    - shopdb:shopdb
    - eureka-service:eureka-service
    - config-server:config-server
+   - auth-server:auth-server
+  logging:
+    driver: syslog
+    options:
+      syslog-address: "tcp://127.0.0.1:25826"
+  depends_on:
+    logstash:
+      condition: service_healthy
+
+hystrix-dashboard-monitor:
+  image: mateuszsojka/hystrix-dashboard-monitor
+  restart: always
+  ports:
+   - "7979:7979"
+  logging:
+    driver: syslog
+    options:
+      syslog-address: "tcp://127.0.0.1:25826"
+  depends_on:
+    logstash:
+    condition: service_healthy
+  links:
+   - config-server:config-server
+
+zuul-proxy:
+  image: mateuszsojka/zuul-proxy
+  restart: always
+  ports:
+   - "8080:8080"
+  logging:
+    driver: syslog
+    options:
+      syslog-address: "tcp://127.0.0.1:25826"
+  depends_on:
+    logstash:
+      condition: service_healthy
+  links:
+   - eureka-service:eureka-service
+   - config-server:config-server
+
+turbine-server:
+  image: mateuszsojka/turbine-server
+  restart: always
+  ports:
+   - "8990:8990"
+  logging:
+    driver: syslog
+    options:
+      syslog-address: "tcp://127.0.0.1:25826"
+  depends_on:
+    logstash:
+      condition: service_healthy
+  links:
+   - config-server:config-server
+
+zipkin-server:
+  image: mateuszsojka/zipkin-server
+  restart: always
+  ports:
+   - "9411:9411"
+  logging:
+    driver: syslog
+    options:
+      syslog-address: "tcp://127.0.0.1:25826"
+  depends_on:
+    logstash:
+      condition: service_healthy
+  links:
+   - config:server-config-server

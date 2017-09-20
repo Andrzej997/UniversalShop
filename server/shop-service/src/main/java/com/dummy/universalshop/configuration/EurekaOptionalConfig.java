@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.Resource;
 
 import java.io.IOException;
@@ -39,6 +40,7 @@ public class EurekaOptionalConfig {
     private EurekaClientConfig config;
 
     @Bean
+    @Primary
     public DiscoveryClient.DiscoveryClientOptionalArgs getTrustStoredEurekaClient()
             throws KeyStoreException, IOException, CertificateException,
             NoSuchAlgorithmException, KeyManagementException, UnrecoverableKeyException {

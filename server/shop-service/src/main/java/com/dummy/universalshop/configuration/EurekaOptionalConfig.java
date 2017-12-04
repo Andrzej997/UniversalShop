@@ -16,6 +16,7 @@ import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.ssl.SSLContexts;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -28,7 +29,7 @@ import java.security.*;
 import java.security.cert.CertificateException;
 
 @Configuration
-public class EurekaOptionalConfig {
+public class EurekaOptionalConfig implements InitializingBean {
 
     @Value("${server.ssl.trust-store}")
     private Resource trustStoreResource;
@@ -36,8 +37,22 @@ public class EurekaOptionalConfig {
     @Value("${server.ssl.trust-store-password}")
     private String trustStorePassword;
 
+    @Value("${server.ssl.key-store}")
+    private Resource keyStoreResource;
+
+    @Value("${server.ssl.key-store-password}")
+    private String keyStorePassword;
+
     @Autowired
     private EurekaClientConfig config;
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        System.setProperty("javax.net.ssl.keyStore", keyStoreResource.getFile().getCanonicalPath());
+        System.setProperty("javax.net.ssl.keyStorePassword", keyStorePassword);
+        System.setProperty("javax.net.ssl.trustStore", trustStoreResource.getFile().getCanonicalPath());
+        System.setProperty("javax.net.ssl.trustStorePassword", trustStorePassword);
+    }
 
     @Bean
     @Primary

@@ -1,0 +1,39 @@
+<mat-toolbar>
+  <mat-toolbar-row style="height: 20pt">
+    <button mat-icon-button style="padding-top: 10pt">
+      <app-label labelKey="{{title}}"></app-label>
+    </button>
+    <div class="full-width" style="padding-top: 10pt"></div>
+    <mat-form-field style="width: 90%; padding-top: 10pt">
+      <input #inpSearch matInput placeholder="" value="" (focus)="onInputSearchFocus()" (blur)="onInputSearchBlur()">
+    </mat-form-field>
+    <div style="width: 20px;padding-top: 10pt"></div>
+    <button #btnSearch mat-icon-button color="accent" (click)="performSearch(inpSearch.value)"
+            style="padding-top: 10pt">
+      <app-label labelKey="Search"></app-label>
+      <mat-icon color="accent">search</mat-icon> <!-- TODO -->
+    </button>
+    <div class="full-width" style="padding-top: 15pt"></div>
+    <mat-form-field [floatPlaceholder]="true" style="padding-top: 15pt">
+      <mat-select #langSelect
+                  style="height: 7pt; font-size: 7pt;"
+                  onchange="langSelectValueChange()"
+                  [formControl]="_langControl" required>
+        <mat-option *ngFor="let lang of _locales" [value]="lang" (change)="langSelectValueChange($event)">
+          {{lang.shortname}}
+        </mat-option>
+      </mat-select>
+      <mat-placeholder style="font-size: 9pt">{{getLabel('Language')}}</mat-placeholder>
+      <mat-hint style="font-size: 8pt">{{_langControl.value?.name}}</mat-hint>
+    </mat-form-field>
+    <button #loginButton mat-button *ngIf="!isLoggedIn" (click)="loginClick()" style="padding-top: 15pt">
+      <app-label labelKey="SignIn"></app-label>
+    </button>
+    <button #accountButton mat-button *ngIf="isLoggedIn" style="padding-top: 15pt">
+      <app-label labelKey="MyAccount"></app-label>
+    </button>
+  </mat-toolbar-row>
+</mat-toolbar>
+<div id="divMainPage" class="full-width-height">
+  <router-outlet></router-outlet>
+</div>

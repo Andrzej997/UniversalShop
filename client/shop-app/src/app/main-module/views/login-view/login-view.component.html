@@ -1,0 +1,44 @@
+<h1 mat-dialog-title>Sign in</h1>
+<div mat-dialog-content class="dialog-content">
+  <div class="login">
+    <mat-form-field [hideRequiredMarker]="true" class="login">
+      <input matInput placeholder="{{getLabel('Email')}}"
+             value="" [formControl]="email"
+             required #inpEmail valueChange class="login">
+      <mat-error *ngIf="email.invalid &amp;&amp; !email.pristine">{{getEmailErrorMessage()}}</mat-error>
+      <mat-hint align="end">{{inpEmail.value?.length || 0}}/80</mat-hint>
+    </mat-form-field>
+  </div>
+  <div class="password">
+    <mat-form-field [hideRequiredMarker]="true" class="password">
+      <input matInput placeholder="{{getLabel('Password')}}" value="" [formControl]="password"
+             type="password" required #inpPassword class="password">
+      <mat-error *ngIf="password.invalid &amp;&amp; !password.pristine"
+                 validationError [formControl]="password" fieldName="{{getLabel('Password')}}"
+                 [fieldValue]="inpPassword.value"
+      >
+      </mat-error>
+    </mat-form-field>
+    <!-- {{getPasswordErrorMessage()}} -->
+  </div>
+</div>
+<div mat-dialog-actions class="login-buttons">
+  <button mat-raised-button color="primary" (submit)="onLoginClick()" type="submit">
+    <app-label labelKey="SignIn"></app-label>
+  </button>
+  <button mat-raised-button color="primary" type="button" (click)="onCancelClick()">
+    <app-label labelKey="Cancel"></app-label>
+  </button>
+</div>
+<div mat-dialog-actions class="v-right-align">
+  <app-label labelKey="ForgotPassword"></app-label>
+  <a routerLink="/password-reminder">
+    <app-label labelKey="RemindMe"></app-label>
+  </a>
+</div>
+<div mat-dialog-actions class="v-right-align">
+  <app-label labelKey="HaveAccountYet"></app-label>
+  <a routerLink="/register">
+    <app-label labelKey="RegisterNow"></app-label>
+  </a>
+</div>

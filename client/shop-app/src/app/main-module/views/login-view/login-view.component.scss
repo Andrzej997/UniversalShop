@@ -1,0 +1,27 @@
+@import "../../../../mixins.scss";
+
+.login {
+  @include size(100%, 'auto');
+}
+
+.password {
+  @include size(100%, 'auto');
+}
+
+.dialog-content {
+  @include size(100%, 'auto');
+  display: block;
+}
+
+.login-buttons {
+  @include size(100%, 'auto');
+  padding-top: 5px;
+  @include h-group;
+  @include group-halign('right');
+}
+
+.v-right-align {
+  @include size(100%, 'auto');
+  @include v-group;
+  @include group-halign('right');
+}
